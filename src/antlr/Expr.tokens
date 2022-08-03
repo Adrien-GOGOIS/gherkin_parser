@@ -1,0 +1,10 @@
+Comment=1
+Scenario=2
+ScenarioOutline=3
+Feature=4
+Space=5
+NewLine=6
+Word=7
+'Scenario:'=2
+'Scenario Outline:'=3
+'Feature:'=4
