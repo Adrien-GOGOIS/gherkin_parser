@@ -15,7 +15,7 @@ public class AntlrToProgram extends ExprBaseVisitor<Program> {
                 program.addExpression(expressionVisitor.visit(ctx.getChild(i)));
             }
         }
-
+        // System.out.println("PROGRAM " + program.expressions.get(1));
         return program;
     }
 }

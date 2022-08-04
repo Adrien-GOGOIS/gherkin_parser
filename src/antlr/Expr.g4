@@ -13,7 +13,7 @@ prog: (feature)+ EOF                                                            
 feature: featHeader featBody                                                             #FeatureDeclaration
        ;
 
-featHeader: (Space)* Feature restOfLine NewLine+                                         #FeatureHeader
+featHeader: (Space)* Feature title NewLine+                                              #FeatureHeader
           ;
 
 featBody: (scenario | outlineScenario)+                                                  #FeatureBody
@@ -22,13 +22,16 @@ featBody: (scenario | outlineScenario)+                                         
 blockBody: restOfLine (NewLine)* restOfLine*                                             #BlockBodyDeclaration
          ;
 
-scenario: (Space | NewLine)* Scenario restOfLine NewLine+ blockBody                      #ScenarioDeclaration
+scenario: (Space | NewLine)* Scenario title NewLine+ blockBody                           #ScenarioDeclaration
         ;
-outlineScenario: (Space | NewLine)* ScenarioOutline restOfLine NewLine+ blockBody        #OutlineScenarioDeclaration
+outlineScenario: (Space | NewLine)* ScenarioOutline title NewLine+ blockBody        #OutlineScenarioDeclaration
                ;
 
 restOfLine: (Space | NewLine)* Word (Word | Space)*                                      #RestOfLineDeclaration
           ;
+
+title: (Space)* Word (Word | Space)*                                                     #TitleDeclaration
+     ;
 
 // Tokens
 Comment: Space* '#' .*? NewLine -> skip;
@@ -41,4 +44,4 @@ Space : [ \t];
 NewLine : '\r'? '\n' | '\r';
 Word: WD;
 
-fragment WD: ~[ \t\r\n]+?;
+fragment WD: [a-zA-Z0-9]*;

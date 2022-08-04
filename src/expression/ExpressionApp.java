@@ -27,8 +27,9 @@ public class ExpressionApp {
             Program program = programVisitor.visit(antlrAST);
             ExpressionProcessor expressionProcessor = new ExpressionProcessor(program.expressions);
 
-            String evaluation = expressionProcessor.displayExpression();
-            System.out.println(evaluation);
+            for (String evaluation : expressionProcessor.displayExpression()) {
+                System.out.println(evaluation);
+            }
         }
     }
 

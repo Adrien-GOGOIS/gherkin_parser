@@ -109,6 +109,18 @@ public class ExprBaseListener implements ExprListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitRestOfLineDeclaration(ExprParser.RestOfLineDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTitleDeclaration(ExprParser.TitleDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTitleDeclaration(ExprParser.TitleDeclarationContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

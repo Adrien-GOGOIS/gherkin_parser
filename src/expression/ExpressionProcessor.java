@@ -1,4 +1,9 @@
 package expression;
+import expression.declaration.RestOfLine;
+import expression.declaration.ScenarioDeclaration;
+import expression.keyword.Scenario;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExpressionProcessor {
@@ -8,7 +13,20 @@ public class ExpressionProcessor {
         this.list = list;
     }
 
-    public String displayExpression() {
-        return list.get(0).toString();
+    public List<String> displayExpression() {
+        List<String> evaluations = new ArrayList<>();
+
+        for (Expression e : list) {
+            if (e instanceof RestOfLine) {
+                RestOfLine declaration = (RestOfLine) e;
+                evaluations.add("Rest of line : " + declaration);
+            }
+
+            if (e instanceof ScenarioDeclaration) {
+                ScenarioDeclaration declaration = (ScenarioDeclaration) e;
+                evaluations.add(declaration.toString());
+            }
+        }
+        return evaluations;
     }
 }

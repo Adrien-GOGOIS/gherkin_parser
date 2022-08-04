@@ -4,11 +4,9 @@ Feature: my super feat
   Scenario: test
     Given un scenario
 
-  Scenario: test2
+  Scenario Outline: test2
     when
     then blabla
 
   Scenario Outline: test SO
-    Given un scenario
-
-    Examples:
+    Given un autre scenario
