@@ -9,4 +9,4 @@ Feature: my super feat
     then blabla
 
   Scenario Outline: test SO
-    Given un autre scenario
+    Given un autre toto

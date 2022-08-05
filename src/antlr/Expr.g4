@@ -16,7 +16,7 @@ feature: featHeader featBody                                                    
 featHeader: (Space)* Feature title NewLine+                                              #FeatureHeader
           ;
 
-featBody: (scenario | outlineScenario)+                                                  #FeatureBody
+featBody: (scenario | outlineScenario)*                                                  #FeatureBody
         ;
 
 blockBody: restOfLine (NewLine)* restOfLine*                                             #BlockBodyDeclaration
@@ -24,14 +24,18 @@ blockBody: restOfLine (NewLine)* restOfLine*                                    
 
 scenario: (Space | NewLine)* Scenario title NewLine+ blockBody                           #ScenarioDeclaration
         ;
-outlineScenario: (Space | NewLine)* ScenarioOutline title NewLine+ blockBody        #OutlineScenarioDeclaration
+
+outlineScenario: (Space | NewLine)* ScenarioOutline title NewLine+ blockBody             #OutlineScenarioDeclaration
                ;
 
-restOfLine: (Space | NewLine)* Word (Word | Space)*                                      #RestOfLineDeclaration
+restOfLine: (Space | NewLine)* word (word | Space)*                                      #RestOfLineDeclaration
           ;
 
-title: (Space)* Word (Word | Space)*                                                     #TitleDeclaration
+title: (Space)* word (word | Space)*                                                     #TitleDeclaration
      ;
+
+word: Word                                                                               #WordDeclaration
+    ;
 
 // Tokens
 Comment: Space* '#' .*? NewLine -> skip;
@@ -42,6 +46,6 @@ Feature: 'Feature:';
 
 Space : [ \t];
 NewLine : '\r'? '\n' | '\r';
-Word: WD;
 
+Word: WD;
 fragment WD: [a-zA-Z0-9]*;

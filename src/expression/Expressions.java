@@ -3,7 +3,7 @@ package expression;
 import antlr.ExprBaseVisitor;
 import antlr.ExprParser;
 
-public class AntlrToProgram extends ExprBaseVisitor<Program> {
+public class Expressions extends ExprBaseVisitor<Program> {
     @Override
     public Program visitProgram(ExprParser.ProgramContext ctx) {
         Program program = new Program();
@@ -15,7 +15,6 @@ public class AntlrToProgram extends ExprBaseVisitor<Program> {
                 program.addExpression(expressionVisitor.visit(ctx.getChild(i)));
             }
         }
-        // System.out.println("PROGRAM " + program.expressions.get(1));
         return program;
     }
 }

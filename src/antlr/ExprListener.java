@@ -117,4 +117,16 @@ public interface ExprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTitleDeclaration(ExprParser.TitleDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code WordDeclaration}
+	 * labeled alternative in {@link ExprParser#word}.
+	 * @param ctx the parse tree
+	 */
+	void enterWordDeclaration(ExprParser.WordDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code WordDeclaration}
+	 * labeled alternative in {@link ExprParser#word}.
+	 * @param ctx the parse tree
+	 */
+	void exitWordDeclaration(ExprParser.WordDeclarationContext ctx);
 }

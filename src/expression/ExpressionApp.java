@@ -2,7 +2,6 @@ package expression;
 
 import antlr.ExprLexer;
 import antlr.ExprParser;
-import expression.declaration.RestOfLine;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -23,12 +22,12 @@ public class ExpressionApp {
             ParseTree antlrAST = parser.prog();
 
             // Create a visitor for converting the parse tree into Program/Expression object
-            AntlrToProgram programVisitor = new AntlrToProgram();
+            Expressions programVisitor = new Expressions();
             Program program = programVisitor.visit(antlrAST);
-            ExpressionProcessor expressionProcessor = new ExpressionProcessor(program.expressions);
 
-            for (String evaluation : expressionProcessor.displayExpression()) {
-                System.out.println(evaluation);
+            for (Expression evaluation : program.expressions) {
+
+                System.out.println(evaluation.toString());
             }
         }
     }

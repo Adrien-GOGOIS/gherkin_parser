@@ -1,5 +1,14 @@
 package expression;
 
-public abstract class Expression {
+public class Expression {
 
+    final String text;
+    final String type;
+    final String position;
+
+    public Expression(String text, String type, String position) {
+        this.text = text;
+        this.type = type;
+        this.position = position;
+    }
 }

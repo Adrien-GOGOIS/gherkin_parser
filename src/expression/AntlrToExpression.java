@@ -2,62 +2,88 @@ package expression;
 
 import antlr.ExprBaseVisitor;
 import antlr.ExprParser;
-import expression.declaration.BlockBody;
-import expression.declaration.RestOfLine;
-import expression.declaration.ScenarioDeclaration;
+import expression.declaration.*;
+import expression.keyword.Feature;
 import expression.keyword.Scenario;
 import expression.keyword.Title;
+import expression.keyword.Word;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
-    List<String> lines = new ArrayList<>();
-
     @Override
     public Expression visitRestOfLineDeclaration(ExprParser.RestOfLineDeclarationContext ctx) {
-        System.out.println(ctx.getChild(1));
-        lines.add(ctx.getText());
-        return new RestOfLine(lines);
+        String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
+        return new RestOfLine(ctx.getText(), "restOfLine", position);
     }
 
     @Override
     public Expression visitFeatureDeclaration(ExprParser.FeatureDeclarationContext ctx) {
-        //System.out.println("Feature : " + ctx.featHeader().getText());
-        return super.visitFeatureDeclaration(ctx);
+        String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
+        Expression header = visit(ctx.featHeader());
+        // Expression body = visit(ctx.featBody());
+        return new FeatureDeclaration(ctx.getText(), "FeatureDeclaration", position, (FeatureHeader) header, null);
     }
 
     @Override
     public Expression visitFeatureHeader(ExprParser.FeatureHeaderContext ctx) {
-        //System.out.println("CTX feature header : " + ctx.Feature().getText() + " ++ " + ctx.restOfLine().getText());
-        return super.visitFeatureHeader(ctx);
+        String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
+        Expression feature = visit(ctx.Feature());
+        Expression title = visit(ctx.title());
+        return new FeatureHeader(ctx.getText(), "FeatureHeader", position, (Feature) feature, (Title) title);
     }
 
     @Override
     public Expression visitFeatureBody(ExprParser.FeatureBodyContext ctx) {
-        //System.out.println("CTX Feature Body : " + ctx.scenario(1).getText());
-        return super.visitFeatureBody(ctx);
+        String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
+        List<Expression> scenarios = new ArrayList<>();
+        for (int i = 0; i < ctx.scenario().size(); i++) {
+            scenarios.add(visit(ctx.getChild(i)));
+        }
+        List<Expression> outlineScenarios = new ArrayList<>();
+        for (int i = 0; i < ctx.outlineScenario().size(); i++) {
+            outlineScenarios.add(visit(ctx.getChild(i)));
+        }
+        return new FeatureBody(ctx.getText(), "FeatureBody", position, scenarios, outlineScenarios);
     }
 
     @Override
     public Expression visitBlockBodyDeclaration(ExprParser.BlockBodyDeclarationContext ctx) {
-        //System.out.println("CTX BLOCK BODY");
-        return super.visitBlockBodyDeclaration(ctx);
+        String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
+        return new BlockBody(ctx.getText(), "BlockBodyDeclaration", position, null);
     }
 
     @Override
     public Expression visitScenarioDeclaration(ExprParser.ScenarioDeclarationContext ctx) {
-        /* Scenario scenario = new Scenario();
-        Title title = new Title(ctx.title().getText());
-        BlockBody blockBody = new BlockBody();
-
-        return new ScenarioDeclaration(scenario, title, blockBody); */
-        return super.visitScenarioDeclaration(ctx);
+        String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
+        Expression scenario = visit(ctx.Scenario());
+        Expression title = visit(ctx.title());
+        Expression blockBody = visit(ctx.blockBody());
+        return new ScenarioDeclaration(ctx.getText(), "ScenarioDeclaration", position, (Scenario) scenario, (Title) title, (BlockBody) blockBody);
     }
 
     @Override
     public Expression visitOutlineScenarioDeclaration(ExprParser.OutlineScenarioDeclarationContext ctx) {
-        return super.visitOutlineScenarioDeclaration(ctx);
+        String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
+        Expression scenario = visit(ctx.ScenarioOutline());
+        Expression title = visit(ctx.title());
+        Expression blockBody = visit(ctx.blockBody());
+        return new OutlineScenarioDeclaration(ctx.getText(), "OutlineScenarioDeclaration", position, (Scenario) scenario, (Title) title, (BlockBody) blockBody);
     }
+
+    @Override
+    public Expression visitTitleDeclaration(ExprParser.TitleDeclarationContext ctx) {
+        String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
+        return new Title(ctx.getText(), "title", position);
+    }
+
+    @Override
+    public Expression visitWordDeclaration(ExprParser.WordDeclarationContext ctx) {
+        String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
+        return new Word(ctx.getText(), "word", position);
+    }
+
+
 }

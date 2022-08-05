@@ -3,14 +3,19 @@ package expression.keyword;
 import expression.Expression;
 
 public class Word extends Expression {
-    String word;
+    final String text;
+    final String type;
+    final String position;
 
-    public Word(String word) {
-        this.word = word;
+    public Word(String text, String type, String position) {
+        super(text, type, position);
+        this.text = text;
+        this.type = type;
+        this.position = position;
     }
 
     @Override
     public String toString() {
-        return word;
+        return type + ": " + text + "\nPosition : " + position;
     }
 }

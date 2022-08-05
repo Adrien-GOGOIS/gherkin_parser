@@ -75,4 +75,11 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTitleDeclaration(ExprParser.TitleDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code WordDeclaration}
+	 * labeled alternative in {@link ExprParser#word}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWordDeclaration(ExprParser.WordDeclarationContext ctx);
 }
