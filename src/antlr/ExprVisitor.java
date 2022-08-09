@@ -13,13 +13,6 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by the {@code Program}
-	 * labeled alternative in {@link ExprParser#prog}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitProgram(ExprParser.ProgramContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code FeatureDeclaration}
 	 * labeled alternative in {@link ExprParser#feature}.
 	 * @param ctx the parse tree

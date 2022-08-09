@@ -19,15 +19,19 @@ public class ExpressionApp {
 
             // Tell ANTLR to build a parse tree
             // Parse from the start symbol : "prog"
-            ParseTree antlrAST = parser.prog();
+            ParseTree antlrAST = parser.feature();
 
             // Create a visitor for converting the parse tree into Program/Expression object
             Expressions programVisitor = new Expressions();
-            Program program = programVisitor.visit(antlrAST);
+            Feature feature = programVisitor.visit(antlrAST);
 
-            for (Expression evaluation : program.expressions) {
+            ExpressionProcessor expressionProcessor = new ExpressionProcessor(feature.expressions);
+            for (String evaluation : expressionProcessor.getEvaluationResults()) {
+                System.out.println(evaluation);
+            }
 
-                System.out.println(evaluation.toString());
+            for (String error : programVisitor.semanticErrors) {
+                System.err.println(error);
             }
         }
     }
@@ -41,11 +45,12 @@ public class ExpressionApp {
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             parser = new ExprParser(tokens);
 
+            parser.removeErrorListeners();
+            parser.addErrorListener(new ErrorListener());
+            parser.setErrorHandler(new CustomErrorHandler());
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // ExprLexer / ExprParser -> nom dépend de l'intitulé du ficher Expr.g4
 
         return parser;
     }

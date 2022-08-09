@@ -23,6 +23,6 @@ public class FeatureHeader extends Expression {
 
     @Override
     public String toString() {
-        return type + ": " + text + "\nPosition : " + position;
+        return type + ":\n" + text + "\nPosition : " + position;
     }
 }

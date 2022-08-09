@@ -4,9 +4,9 @@ Feature: my super feat
   Scenario: test
     Given un scenario
 
-  Scenario Outline: test2
+  Scenario: test
     when
     then blabla
 
-  Scenario Outline: test SO
+  Scenario: test SO
     Given un autre toto

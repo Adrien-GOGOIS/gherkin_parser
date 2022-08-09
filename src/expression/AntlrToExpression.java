@@ -7,24 +7,19 @@ import expression.keyword.Feature;
 import expression.keyword.Scenario;
 import expression.keyword.Title;
 import expression.keyword.Word;
+import org.antlr.v4.runtime.Token;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
-    @Override
-    public Expression visitRestOfLineDeclaration(ExprParser.RestOfLineDeclarationContext ctx) {
-        String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
-        return new RestOfLine(ctx.getText(), "restOfLine", position);
-    }
+    private final List<String> variables; // Stock les titres de scenario et feature entrés dans le programme
+    private final List<String> semanticErrors; // 1. Duplicate 2. Reference to undeclared variable
 
-    @Override
-    public Expression visitFeatureDeclaration(ExprParser.FeatureDeclarationContext ctx) {
-        String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
-        Expression header = visit(ctx.featHeader());
-        // Expression body = visit(ctx.featBody());
-        return new FeatureDeclaration(ctx.getText(), "FeatureDeclaration", position, (FeatureHeader) header, null);
+    public AntlrToExpression(List<String> semanticErrors) {
+        variables = new ArrayList<>();
+        this.semanticErrors = semanticErrors;
     }
 
     @Override
@@ -50,13 +45,8 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
     }
 
     @Override
-    public Expression visitBlockBodyDeclaration(ExprParser.BlockBodyDeclarationContext ctx) {
-        String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
-        return new BlockBody(ctx.getText(), "BlockBodyDeclaration", position, null);
-    }
-
-    @Override
     public Expression visitScenarioDeclaration(ExprParser.ScenarioDeclarationContext ctx) {
+
         String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
         Expression scenario = visit(ctx.Scenario());
         Expression title = visit(ctx.title());
@@ -75,8 +65,29 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
     @Override
     public Expression visitTitleDeclaration(ExprParser.TitleDeclarationContext ctx) {
+
         String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
-        return new Title(ctx.getText(), "title", position);
+        String id = ctx.getText();
+
+        if (variables.contains((id))) {
+            semanticErrors.add("Error : title >>" + id + " << already declared at " + position);
+        } else {
+            variables.add(id);
+        }
+
+        return new Title(id, "title", position);
+    }
+
+    @Override
+    public Expression visitBlockBodyDeclaration(ExprParser.BlockBodyDeclarationContext ctx) {
+        String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
+        return new BlockBody(ctx.getText(), "BlockBodyDeclaration", position, null);
+    }
+
+    @Override
+    public Expression visitRestOfLineDeclaration(ExprParser.RestOfLineDeclarationContext ctx) {
+        String position = ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine();
+        return new RestOfLine(ctx.getText(), "restOfLine", position);
     }
 
     @Override

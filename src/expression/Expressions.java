@@ -3,18 +3,25 @@ package expression;
 import antlr.ExprBaseVisitor;
 import antlr.ExprParser;
 
-public class Expressions extends ExprBaseVisitor<Program> {
-    @Override
-    public Program visitProgram(ExprParser.ProgramContext ctx) {
-        Program program = new Program();
-        AntlrToExpression expressionVisitor = new AntlrToExpression();
+import java.util.ArrayList;
+import java.util.List;
 
-        for (int i =0; i < ctx.getChildCount(); i++) {
+public class Expressions extends ExprBaseVisitor<Feature> {
+
+    public List<String> semanticErrors;
+
+    @Override
+    public Feature visitFeatureDeclaration(ExprParser.FeatureDeclarationContext ctx) {
+        Feature feature = new Feature();
+        semanticErrors = new ArrayList<>();
+        AntlrToExpression expressionVisitor = new AntlrToExpression(semanticErrors);
+
+        for (int i = 0; i < ctx.getChildCount(); i++) {
             if (i != ctx.getChildCount() - 1) {
                 // Last child of the start symbol program is EOF -> Do not visit this child and try to convert into an Expression object
-                program.addExpression(expressionVisitor.visit(ctx.getChild(i)));
+                feature.addExpression(expressionVisitor.visit(ctx.getChild(i)));
             }
         }
-        return program;
+        return feature;
     }
 }

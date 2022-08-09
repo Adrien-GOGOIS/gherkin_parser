@@ -7,10 +7,7 @@ grammar Expr;
 }
 
 // Start Symbol
-prog: (feature)+ EOF                                                                     #Program
-    ;
-
-feature: featHeader featBody                                                             #FeatureDeclaration
+feature: featHeader featBody EOF                                                         #FeatureDeclaration
        ;
 
 featHeader: (Space)* Feature title NewLine+                                              #FeatureHeader
@@ -49,3 +46,5 @@ NewLine : '\r'? '\n' | '\r';
 
 Word: WD;
 fragment WD: [a-zA-Z0-9]*;
+
+ERR_TOKEN : . ;
